@@ -1,0 +1,2395 @@
+<!DOCTYPE html>
+<Html>
+	<head>
+		<title>HW8</title>
+        <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+
+		<!-- Optional theme -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css" integrity="sha384-aUGj/X2zp5rLCbBxumKTCw2Z50WgIr1vs/PFN4praOTvYXWlVyh2UtNUU0KAUhAX" crossorigin="anonymous">
+
+		<!--OpenLayers-->
+		<script src="http://openlayers.org/api/OpenLayers.js"></script>
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+		<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.js"></script>
+		<script src="http://ajax.microsoft.com/ajax/jquery.validate/1.11.1/additional-methods.js"></script>
+        
+		<style type="text/css">
+			#searchFormdiv {
+				background-color: rgba(0, 0, 0, 0.2) !important;
+				padding: 2% 2%;
+				-moz-border-radius: 2px;
+				-webkit-border-radius: 2px;
+				border-radius: 2px;
+				-webkit-box-shadow: 1px 1px 3px #292929;
+				-moz-box-shadow: 1px 1px 3px #292929;
+				box-shadow: 1px 1px 3px #292929;
+			}
+			#EntireBody {//
+				background-image: url(http://cs-server.usc.edu:45678/hw/hw8/images/bg.jpg);
+                background-size: cover;
+			}
+			body {
+				background: url('http://cs-server.usc.edu:45678/hw/hw8/images/bg.jpg') no-repeat center center fixed;
+                background-image: url(http://cs-server.usc.edu:45678/hw/hw8/images/bg.jpg);
+                background-size: cover;
+			}
+			#searchForm {
+				color: white;
+			}
+            .buttonPlus {
+				background-color: Transparent;
+				background-repeat: no-repeat;
+				border: none;
+				cursor: pointer;
+				overflow: hidden;
+				outline: none;
+			}
+            .nav-pills>li>a{
+                background-color:#eee;
+                
+            }
+            .nav-pills>li.active>a{
+                background-color:#337ab7;
+            }
+            .table {
+				width: 100%;
+				max-width: 100%;
+				margin-bottom: 20px;
+			}
+			.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+				padding: 8px;
+				line-height: 1.42857143;
+				vertical-align: top;
+				border-top: 0px solid #ddd;
+			}
+			.table > thead > tr > th {
+				vertical-align: bottom;
+				border-bottom: 0px solid #ddd;
+			}
+			.table > caption + thead > tr:first-child > th, .table > colgroup + thead > tr:first-child > th, .table > thead:first-child > tr:first-child > th, .table > caption + thead > tr:first-child > td, .table > colgroup + thead > tr:first-child > td, .table > thead:first-child > tr:first-child > td {
+				border-top: 0;
+			}
+			.table > tbody + tbody {
+				border-top: 0px solid #ddd;
+			}
+			.table .table {
+				background-color: #fff;
+
+
+
+			}
+            
+            
+		</style>
+	</head>
+	<body class="text-center" id="EntireBody">
+		<!--  <img class="img-responsive" src="http://cs-server.usc.edu:45678/hw/hw8/images/bg.jpg" alt="">
+		-->
+        <div class="container">
+		<div id="Heading" align=center>
+			<h2>Forecast Search</h2>
+		</div>
+
+        <div id="fields" class="row center-block">
+			<div id="searchFormdiv" align="center">
+				<form class="form-inline text-left" id="searchForm" action="forecastHW8.php" method="get">
+					<div class="form-group">
+						<label for="StreetAddress">Street Address: <span style="color:red">*</span></label>
+						<br>
+						<input type="text" class="form-control" id="StreetAddress" name="StreetAddress" placeholder="Enter street address" size="30%"/>
+						<br>
+						<div id="errorcontainer-street" class='errorDiv' style="color:red"></div>
+					</div>
+
+					<div class="form-group">
+						<label for="CityName">City: <span style="color:red">*</span></label>
+						<br>
+						<input type="text" class="form-control" id="CityName" name="CityName" placeholder="Enter the city name" size="20%" required />
+						<br>
+						<div id="errorcontainer-city" class='errorDiv' style="color:red"></div>
+					</div>
+
+					<div class="form-group">
+						<label for="state">State: <span style="color:red">*</span></label>
+						<br>
+						<select class="form-control" id="state" name="state" style="width: 100%" data-dropup-auto="false">
+							<option value="">Select your state...</option>
+							<option value="AL">Alabama</option>
+							<option value="AK">Alaska</option>
+							<option value="AZ">Arizona</option>
+							<option value="AR">Arkansas</option>
+							<option value="CA">California</option>
+							<option value="CO">Colorado</option>
+							<option value="CT">Connecticut</option>
+							<option value="DE">Delaware</option>
+							<option value="DC">District Of Columbia</option>
+							<option value="FL">Florida</option>
+							<option value="GA">Georgia</option>
+							<option value="HI">Hawaii</option>
+							<option value="ID">Idaho</option>
+							<option value="IL">Illinois</option>
+							<option value="IN">Indiana</option>
+							<option value="IA">Iowa</option>
+							<option value="KS">Kansas</option>
+							<option value="KY">Kentucky</option>
+							<option value="LA">Louisiana</option>
+							<option value="ME">Maine</option>
+							<option value="MD">Maryland</option>
+							<option value="MA">Massachusetts</option>
+							<option value="MI">Michigan</option>
+							<option value="MN">Minnesota</option>
+							<option value="MS">Mississippi</option>
+							<option value="MO">Missouri</option>
+							<option value="MT">Montana</option>
+							<option value="NE">Nebraska</option>
+							<option value="NV">Nevada</option>
+							<option value="NH">New Hampshire</option>
+							<option value="NJ">New Jersey</option>
+							<option value="NM">New Mexico</option>
+							<option value="NY">New York</option>
+							<option value="NC">North Carolina</option>
+							<option value="ND">North Dakota</option>
+							<option value="OH">Ohio</option>
+							<option value="OK">Oklahoma</option>
+							<option value="OR">Oregon</option>
+							<option value="PA">Pennsylvania</option>
+							<option value="RI">Rhode Island</option>
+							<option value="SC">South Carolina</option>
+							<option value="SD">South Dakota</option>
+							<option value="TN">Tennessee</option>
+							<option value="TX">Texas</option>
+							<option value="UT">Utah</option>
+							<option value="VT">Vermont</option>
+							<option value="VA">Virginia</option>
+							<option value="WA">Washington</option>
+							<option value="WV">West Virginia</option>
+							<option value="WI">Wisconsin</option>
+							<option value="WY">Wyoming</option>
+						</select>
+						<br>
+						<div id="errorcontainer-state" class='errorDiv' style="color:red"></div>
+					</div>
+					
+                    <div class="form-group">
+							<label for="degrees">Degree:<span style="color:red">*</span> </label>
+							<br>
+							<label class="radio-inline">
+								<input type="radio" name="degrees" id="us" value="us" checked>
+								Fahrenheit</label>
+							<label class="radio-inline">
+								<input type="radio" name="degrees" id="si" value="si">
+								Celsius</label>
+					</div>
+
+					<div class="form-group pull-right">
+						<br>
+						<button type="submit" class="btn btn-primary" value="Search">
+							<span class="glyphicon glyphicon-search"></span> Search
+						</button>
+						<button type="button" class="btn btn-default" value="Clear" name="Clear" id="Clear" onclick="location.replace(location)">
+							<span class="glyphicon glyphicon-refresh"></span> Clear
+						</button>
+					</div>
+					<div class="text-right">
+						<label>Powered by <a href="http://forecast.io/"><img src="http://cs-server.usc.edu:45678/hw/hw8/images/forecast_logo.png" alt="forecast_logo" width="100px"/></a></label>
+					</div>
+				</form>
+			</div>
+			<hr>
+		</div>
+
+		<!-----RESULTS--->
+		<div id="result" class="row center-block" >
+
+			<ul class="nav nav-pills" role="tablist">
+				<li  class="active">
+					<a id="RightNowAnch" href="#RightNow" data-toggle="tab" >Right Now</a>
+				</li>
+				<li>
+					<a id="NextHoursTabAnch" href="#NextHoursTab" data-toggle="tab">Next 24 Hours</a>
+				</li>
+				<li>
+					<a id="NextDaysTabAnch" href="#NextDaysTab" data-toggle="tab">Next 7 Days</a>
+				</li>
+			</ul>
+
+			<div class="tab-content">
+				<div class="tab-pane fade in active" id="RightNow">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="row" style="background-color: #d9534f">
+                                <div class="col-md-6" style="margin-top: 3%" >
+                                    <img id="WeatherIcon" src="" class="img-responsive center-block" width="50%" alt="N.A."/>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <label id="WeatherSummary"></label>
+                                    </div>
+                                    <div class="row">
+                                        <table class="center-block" style="display: inline-block">
+                                            <tr class="text-center">
+                                                <td class="text-right"><label style="font-size: 70px" id="temperature"></label></td>
+                                                <td class="text-left">
+                                                <p style="font-size: 20px;color: #fff;padding-bottom: 28px" id="temperatureUnit">														</p></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="row">
+                                        <div class="center-block" style="display: inline-block;padding-top: 20px">
+                                            <span style="color:blue" id="low_temp"></span> | <span style="color:green" id="high_temp"></span>
+                                        </div>
+                                        <button class="buttonPlus pull-right" onclick="sharefb()"><img src="http://cs-server.usc.edu:45678/hw/hw8/images/fb_icon.png" width="40px;" style="padding-bottom: 10px" />
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <table class="table text-left" >
+                                    <tr >
+
+                                    </tr>
+                                    <tr style="background-color:#faeaea">
+                                        <td>Precipitation</td>
+                                        <td><span id="PrecipNow"></span></td>
+                                    </tr>
+                                    <tr style="background-color:#ffcccc">
+                                        <td>Chance of Rain</td>
+                                        <td><span id="RainNow"></span>%</td>
+                                    </tr>
+                                    <tr style="background-color:#faeaea">
+                                        <td>Wind Speed</td>
+                                        <td><span id="WindNow"></span></td>
+                                    </tr>
+                                    <tr style="background-color:#ffcccc">
+                                        <td>Dew Point</td>
+                                        <td><span id="DewNow"></span></td>
+                                    </tr>
+                                    <tr style="background-color:#faeaea">
+                                        <td>Humidity</td>
+                                        <td><span id="HumidNow"></span>%</td>
+                                    </tr>
+                                    <tr style="background-color:#ffcccc">
+                                        <td>Visibility</td>
+                                        <td><span id="VisiNow"></span></td>
+                                    </tr>
+                                    <tr style="background-color:#faeaea">
+                                        <td>Sunrise</td>
+                                        <td><span id="SunriseNow"></span></td>
+                                    </tr>
+                                    <tr style="background-color:#ffcccc">
+                                        <td>Sunset</td>
+                                        <td><span id="SunsetNow"></span></td>
+                                    </tr>
+
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" id="MapLocation" style="height:473px;">
+                        </div>
+                    </div>
+                   </div>
+                </div>
+				<div  class="tab-pane fade" id="NextHoursTab">
+                <div style="background-color: #fff">
+                    <table class="table table-condensed" style="border: 1px solid #ddd !important;">
+                    <tr class="bg-primary text-center" style="border: 1px solid #ddd !important;font-weight:bold">
+                        <tr class="bg-primary text-center" style="border: 1px solid #ddd !important;font-weight:bold">
+                            <td>Time</td>
+                            <td>Summary</td>
+                            <td>Cloud Cover</td>
+                            <td>Temp (&deg;<span id="tmp24head"></span>)</td>
+                            <td>View Details</td>
+                        </tr>
+                        <tr style="border: 1px solid #ddd !important;">
+                            <td colspan="5"></td><!--use colspan to expand and collapse the contents,awesome!-->
+                        </tr>
+                        <tr class="text-center" style="border: 1px solid #ddd !important;">
+                            <td> <span id="time1" ></span></td>
+                            <td><img id="img1" src="" height="40px" title="" alt="" /></td>
+                            <td><span id="cover1" ></span>%</td>
+                            <td><span id="temp1" ></span></td>
+                           <!-- <td role="tab" id="hone"><a data-toggle="collapse" data-parent="#accordion" href="#cone1" aria-expanded="true" aria-controls="cone1" ><span class="glyphicon glyphicon-plus" style="color: #337ab7" aria-hidden="true"></span></a></td>
+                            -->
+                            <td>
+                            <button class="buttonPlus" data-toggle="collapse"  data-target="#cone1">
+                                    <span class="glyphicon glyphicon-plus" style="color: #337ab7" ></span>
+                                </button></td>
+                        </tr>
+                        <tr style="border: 1px solid #ddd !important;">
+                            <td class="text-center"colspan="5">
+                                <div id="cone1" class="panel-collapse collapse">
+                                    <div class="panel-default panel-body" style="background-color: #ddd">
+                                        <div class="panel-default ">
+                                            
+                                                <table class="table table-condensed text-center">
+                                                    <thead style="font-weight:bold">
+                                                        <tr style="background-color: #fff">
+                                                            <td>Wind</td>
+                                                            <td>Humidity</td>
+                                                            <td>Visibility</td>
+                                                            <td>Pressure</td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr style="font-size: small;background-color: #ddd">
+                                                            <td><span id="wind1" ></span></td>
+                                                            <td><span id="humid1" ></span>%</td>
+                                                            <td><span id="visi1" ></span></td>
+                                                            <td><span id="pres1" ></span></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>	
+                        
+                        
+                        <tr class="text-center" style="border: 1px solid #ddd !important;">
+                            <td> <span id="time2" ></span></td>
+                            <td><img id="img2" src="" height="40px" title="" alt="" /></td>
+                            <td><span id="cover2" ></span>%</td>
+                            <td><span id="temp2" ></span></td>
+                           <!-- <td role="tab" id="hone"><a data-toggle="collapse" data-parent="#accordion" href="#cone1" aria-expanded="true" aria-controls="cone1" ><span class="glyphicon glyphicon-plus" style="color: #337ab7" aria-hidden="true"></span></a></td>
+                            -->
+                            <td>
+                            <button class="buttonPlus" data-toggle="collapse"  data-target="#cone2">
+                                    <span class="glyphicon glyphicon-plus" style="color: #337ab7" ></span>
+                                </button></td>
+                        </tr>
+                        <tr style="border: 1px solid #ddd !important;">
+                            <td class="text-center"colspan="5">
+                                <div id="cone2" class="panel-collapse collapse">
+                                    <div class="panel-default panel-body" style="background-color: #ddd">
+                                        <div class="panel-default ">
+                                            
+                                                <table class="table table-condensed text-center">
+                                                    <thead style="font-weight:bold">
+                                                        <tr style="background-color: #fff">
+                                                            <td>Wind</td>
+                                                            <td>Humidity</td>
+                                                            <td>Visibility</td>
+                                                            <td>Pressure</td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr style="font-size: small;background-color: #ddd">
+                                                            <td><span id="wind2" ></span></td>
+                                                            <td><span id="humid2" ></span>%</td>
+                                                            <td><span id="visi2" ></span></td>
+                                                            <td><span id="pres2" ></span></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>	
+                        
+                        <tr class="text-center" style="border: 1px solid #ddd !important;">
+                            <td> <span id="time3" ></span></td>
+                            <td><img id="img3" src="" height="40px" title="" alt="" /></td>
+                            <td><span id="cover3" ></span>%</td>
+                            <td><span id="temp3" ></span></td>
+                           <!-- <td role="tab" id="hone"><a data-toggle="collapse" data-parent="#accordion" href="#cone3" aria-expanded="true" aria-controls="cone3" ><span class="glyphicon glyphicon-plus" style="color: #337ab7" aria-hidden="true"></span></a></td>
+                            -->
+                            <td>
+                            <button class="buttonPlus" data-toggle="collapse"  data-target="#cone3">
+                                    <span class="glyphicon glyphicon-plus" style="color: #337ab7" ></span>
+                                </button></td>
+                        </tr>
+                        <tr style="border: 1px solid #ddd !important;">
+                            <td class="text-center"colspan="5">
+                                <div id="cone3" class="panel-collapse collapse">
+                                    <div class="panel-default panel-body" style="background-color: #ddd">
+                                        <div class="panel-default ">
+                                            
+                                                <table class="table table-condensed text-center">
+                                                    <thead style="font-weight:bold">
+                                                        <tr style="background-color: #fff">
+                                                            <td>Wind</td>
+                                                            <td>Humidity</td>
+                                                            <td>Visibility</td>
+                                                            <td>Pressure</td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr style="font-size: small;background-color: #ddd">
+                                                            <td><span id="wind3" ></span></td>
+                                                            <td><span id="humid3" ></span>%</td>
+                                                            <td><span id="visi3" ></span></td>
+                                                            <td><span id="pres3" ></span></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    
+                                </div>
+                            </td>
+                        </tr>	
+                        
+                        <tr class="text-center" style="border: 1px solid #ddd !important;">
+                            <td> <span id="time4" ></span></td>
+                            <td><img id="img4" src="" height="40px" title="" alt="" /></td>
+                            <td><span id="cover4" ></span>%</td>
+                            <td><span id="temp4" ></span></td>
+                           <!-- <td role="tab" id="hone"><a data-toggle="collapse" data-parent="#accordion" href="#cone4" aria-expanded="true" aria-controls="cone4" ><span class="glyphicon glyphicon-plus" style="color: #337ab7" aria-hidden="true"></span></a></td>
+                            -->
+                            <td>
+                            <button class="buttonPlus" data-toggle="collapse"  data-target="#cone4">
+                                    <span class="glyphicon glyphicon-plus" style="color: #337ab7" ></span>
+                                </button></td>
+                        </tr>
+                        <tr style="border: 1px solid #ddd !important;">
+                            <td class="text-center"colspan="5">
+                                <div id="cone4" class="panel-collapse collapse">
+                                    <div class="panel-default panel-body" style="background-color: #ddd">
+                                        <div class="panel-default ">
+                                            
+                                                <table class="table table-condensed text-center">
+                                                    <thead style="font-weight:bold">
+                                                        <tr style="background-color: #fff">
+                                                            <td>Wind</td>
+                                                            <td>Humidity</td>
+                                                            <td>Visibility</td>
+                                                            <td>Pressure</td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr style="font-size: small;background-color: #ddd">
+                                                            <td><span id="wind4" ></span></td>
+                                                            <td><span id="humid4" ></span>%</td>
+                                                            <td><span id="visi4" ></span></td>
+                                                            <td><span id="pres4" ></span></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>	
+                        
+                        <tr class="text-center" style="border: 1px solid #ddd !important;">
+                            <td> <span id="time5" ></span></td>
+                            <td><img id="img5" src="" height="40px" title="" alt="" /></td>
+                            <td><span id="cover5" ></span>%</td>
+                            <td><span id="temp5" ></span></td>
+                           <!-- <td role="tab" id="hone"><a data-toggle="collapse" data-parent="#accordion" href="#cone5" aria-expanded="true" aria-controls="cone5" ><span class="glyphicon glyphicon-plus" style="color: #337ab7" aria-hidden="true"></span></a></td>
+                            -->
+                            <td>
+                            <button class="buttonPlus" data-toggle="collapse"  data-target="#cone5">
+                                    <span class="glyphicon glyphicon-plus" style="color: #337ab7" ></span>
+                                </button></td>
+                        </tr>
+                        <tr style="border: 1px solid #ddd !important;">
+                            <td class="text-center"colspan="5">
+                                <div id="cone5" class="panel-collapse collapse">
+                                    <div class="panel-default panel-body" style="background-color: #ddd">
+                                        <div class="panel-default ">
+                                            
+                                                <table class="table table-condensed text-center">
+                                                    <thead style="font-weight:bold">
+                                                        <tr style="background-color: #fff">
+                                                            <td>Wind</td>
+                                                            <td>Humidity</td>
+                                                            <td>Visibility</td>
+                                                            <td>Pressure</td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr style="font-size: small;background-color: #ddd">
+                                                            <td><span id="wind5" ></span></td>
+                                                            <td><span id="humid5" ></span>%</td>
+                                                            <td><span id="visi5" ></span></td>
+                                                            <td><span id="pres5" ></span></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>	
+                        
+                        <tr class="text-center" style="border: 1px solid #ddd !important;">
+                            <td> <span id="time6" ></span></td>
+                            <td><img id="img6" src="" height="40px" title="" alt="" /></td>
+                            <td><span id="cover6" ></span>%</td>
+                            <td><span id="temp6" ></span></td>
+                           <!-- <td role="tab" id="hone"><a data-toggle="collapse" data-parent="#accordion" href="#cone6" aria-expanded="true" aria-controls="cone6" ><span class="glyphicon glyphicon-plus" style="color: #337ab7" aria-hidden="true"></span></a></td>
+                            -->
+                            <td>
+                            <button class="buttonPlus" data-toggle="collapse"  data-target="#cone6">
+                                    <span class="glyphicon glyphicon-plus" style="color: #337ab7" ></span>
+                                </button></td>
+                        </tr>
+                        <tr style="border: 1px solid #ddd !important;">
+                            <td class="text-center"colspan="5">
+                                <div id="cone6" class="panel-collapse collapse">
+                                    <div class="panel-default panel-body" style="background-color: #ddd">
+                                        <div class="panel-default ">
+                                            
+                                                <table class="table table-condensed text-center">
+                                                    <thead style="font-weight:bold">
+                                                        <tr style="background-color: #fff">
+                                                            <td>Wind</td>
+                                                            <td>Humidity</td>
+                                                            <td>Visibility</td>
+                                                            <td>Pressure</td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr style="font-size: small;background-color: #ddd">
+                                                            <td><span id="wind6" ></span></td>
+                                                            <td><span id="humid6" ></span>%</td>
+                                                            <td><span id="visi6" ></span></td>
+                                                            <td><span id="pres6" ></span></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>	
+                        
+                        <tr class="text-center" style="border: 1px solid #ddd !important;">
+                            <td> <span id="time7" ></span></td>
+                            <td><img id="img7" src="" height="40px" title="" alt="" /></td>
+                            <td><span id="cover7" ></span>%</td>
+                            <td><span id="temp7" ></span></td>
+                           <!-- <td role="tab" id="hone"><a data-toggle="collapse" data-parent="#accordion" href="#cone7" aria-expanded="true" aria-controls="cone7" ><span class="glyphicon glyphicon-plus" style="color: #337ab7" aria-hidden="true"></span></a></td>
+                            -->
+                            <td>
+                            <button class="buttonPlus" data-toggle="collapse"  data-target="#cone7">
+                                    <span class="glyphicon glyphicon-plus" style="color: #337ab7" ></span>
+                                </button></td>
+                        </tr>
+                        <tr style="border: 1px solid #ddd !important;">
+                            <td class="text-center"colspan="5">
+                                <div id="cone7" class="panel-collapse collapse">
+                                    <div class="panel-default panel-body" style="background-color: #ddd">
+                                        <div class="panel-default ">
+                                            
+                                                <table class="table table-condensed text-center">
+                                                    <thead style="font-weight:bold">
+                                                        <tr style="background-color: #fff">
+                                                            <td>Wind</td>
+                                                            <td>Humidity</td>
+                                                            <td>Visibility</td>
+                                                            <td>Pressure</td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr style="font-size: small;background-color: #ddd">
+                                                            <td><span id="wind7" ></span></td>
+                                                            <td><span id="humid7" ></span>%</td>
+                                                            <td><span id="visi7" ></span></td>
+                                                            <td><span id="pres7" ></span></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>	
+                        
+                        <tr class="text-center" style="border: 1px solid #ddd !important;">
+                            <td> <span id="time8" ></span></td>
+                            <td><img id="img8" src="" height="40px" title="" alt="" /></td>
+                            <td><span id="cover8" ></span>%</td>
+                            <td><span id="temp8" ></span></td>
+                           <!-- <td role="tab" id="hone"><a data-toggle="collapse" data-parent="#accordion" href="#cone8" aria-expanded="true" aria-controls="cone8" ><span class="glyphicon glyphicon-plus" style="color: #337ab7" aria-hidden="true"></span></a></td>
+                            -->
+                            <td>
+                            <button class="buttonPlus" data-toggle="collapse"  data-target="#cone8">
+                                    <span class="glyphicon glyphicon-plus" style="color: #337ab7" ></span>
+                                </button></td>
+                        </tr>
+                        <tr style="border: 1px solid #ddd !important;">
+                            <td class="text-center"colspan="5">
+                                <div id="cone8" class="panel-collapse collapse">
+                                    <div class="panel-default panel-body" style="background-color: #ddd">
+                                        <div class="panel-default ">
+                                            
+                                                <table class="table table-condensed text-center">
+                                                    <thead style="font-weight:bold">
+                                                        <tr style="background-color: #fff">
+                                                            <td>Wind</td>
+                                                            <td>Humidity</td>
+                                                            <td>Visibility</td>
+                                                            <td>Pressure</td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr style="font-size: small;background-color: #ddd">
+                                                            <td><span id="wind8" ></span></td>
+                                                            <td><span id="humid8" ></span>%</td>
+                                                            <td><span id="visi8" ></span></td>
+                                                            <td><span id="pres8" ></span></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>	
+                        
+                        <tr class="text-center" style="border: 1px solid #ddd !important;">
+                            <td> <span id="time9" ></span></td>
+                            <td><img id="img9" src="" height="40px" title="" alt="" /></td>
+                            <td><span id="cover9" ></span>%</td>
+                            <td><span id="temp9" ></span></td>
+                           <!-- <td role="tab" id="hone"><a data-toggle="collapse" data-parent="#accordion" href="#cone9" aria-expanded="true" aria-controls="cone9" ><span class="glyphicon glyphicon-plus" style="color: #337ab7" aria-hidden="true"></span></a></td>
+                            -->
+                            <td>
+                            <button class="buttonPlus" data-toggle="collapse"  data-target="#cone9">
+                                    <span class="glyphicon glyphicon-plus" style="color: #337ab7" ></span>
+                                </button></td>
+                        </tr>
+                        <tr style="border: 1px solid #ddd !important;">
+                            <td class="text-center"colspan="5">
+                                <div id="cone9" class="panel-collapse collapse">
+                                    <div class="panel-default panel-body" style="background-color: #ddd">
+                                        <div class="panel-default ">
+                                            
+                                                <table class="table table-condensed text-center">
+                                                    <thead style="font-weight:bold">
+                                                        <tr style="background-color: #fff">
+                                                            <td>Wind</td>
+                                                            <td>Humidity</td>
+                                                            <td>Visibility</td>
+                                                            <td>Pressure</td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr style="font-size: small;background-color: #ddd">
+                                                            <td><span id="wind9" ></span></td>
+                                                            <td><span id="humid9" ></span>%</td>
+                                                            <td><span id="visi9" ></span></td>
+                                                            <td><span id="pres9" ></span></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    
+                                </div>
+                            </td>
+                        </tr>	
+                        
+                        <tr class="text-center" style="border: 1px solid #ddd !important;">
+                            <td> <span id="time10" ></span></td>
+                            <td><img id="img10" src="" height="40px" title="" alt="" /></td>
+                            <td><span id="cover10" ></span>%</td>
+                            <td><span id="temp10" ></span></td>
+                           <!-- <td role="tab" id="hone"><a data-toggle="collapse" data-parent="#accordion" href="#cone10" aria-expanded="true" aria-controls="cone10" ><span class="glyphicon glyphicon-plus" style="color: #337ab7" aria-hidden="true"></span></a></td>
+                            -->
+                            <td>
+                            <button class="buttonPlus" data-toggle="collapse"  data-target="#cone10">
+                                    <span class="glyphicon glyphicon-plus" style="color: #337ab7" ></span>
+                                </button></td>
+                        </tr>
+                        <tr style="border: 1px solid #ddd !important;">
+                            <td class="text-center"colspan="5">
+                                <div id="cone10" class="panel-collapse collapse">
+                                    <div class="panel-default panel-body" style="background-color: #ddd">
+                                        <div class="panel-default ">
+                                            
+                                                <table class="table table-condensed text-center">
+                                                    <thead style="font-weight:bold">
+                                                        <tr style="background-color: #fff">
+                                                            <td>Wind</td>
+                                                            <td>Humidity</td>
+                                                            <td>Visibility</td>
+                                                            <td>Pressure</td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr style="font-size: small;background-color: #ddd">
+                                                            <td><span id="wind10" ></span></td>
+                                                            <td><span id="humid10" ></span>%</td>
+                                                            <td><span id="visi10" ></span></td>
+                                                            <td><span id="pres10" ></span></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>	
+                        
+                        <tr class="text-center" style="border: 1px solid #ddd !important;">
+                            <td> <span id="time11" ></span></td>
+                            <td><img id="img11" src="" height="40px" title="" alt="" /></td>
+                            <td><span id="cover11" ></span>%</td>
+                            <td><span id="temp11" ></span></td>
+                           <!-- <td role="tab" id="hone"><a data-toggle="collapse" data-parent="#accordion" href="#cone11" aria-expanded="true" aria-controls="cone11" ><span class="glyphicon glyphicon-plus" style="color: #337ab7" aria-hidden="true"></span></a></td>
+                            -->
+                            <td>
+                            <button class="buttonPlus" data-toggle="collapse"  data-target="#cone11">
+                                    <span class="glyphicon glyphicon-plus" style="color: #337ab7" ></span>
+                                </button></td>
+                        </tr>
+                        <tr style="border: 1px solid #ddd !important;">
+                            <td class="text-center"colspan="5">
+                                <div id="cone11" class="panel-collapse collapse">
+                                    <div class="panel-default panel-body" style="background-color: #ddd">
+                                        <div class="panel-default ">
+                                            
+                                                <table class="table table-condensed text-center">
+                                                    <thead style="font-weight:bold">
+                                                        <tr style="background-color: #fff">
+                                                            <td>Wind</td>
+                                                            <td>Humidity</td>
+                                                            <td>Visibility</td>
+                                                            <td>Pressure</td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr style="font-size: small;background-color: #ddd">
+                                                            <td><span id="wind11" ></span></td>
+                                                            <td><span id="humid11" ></span>%</td>
+                                                            <td><span id="visi11" ></span></td>
+                                                            <td><span id="pres11" ></span></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>	
+                        
+                        <tr class="text-center" style="border: 1px solid #ddd !important;">
+                            <td> <span id="time12" ></span></td>
+                            <td><img id="img12" src="" height="40px" title="" alt="" /></td>
+                            <td><span id="cover12" ></span>%</td>
+                            <td><span id="temp12" ></span></td>
+                           <!-- <td role="tab" id="hone"><a data-toggle="collapse" data-parent="#accordion" href="#cone12" aria-expanded="true" aria-controls="cone12" ><span class="glyphicon glyphicon-plus" style="color: #337ab7" aria-hidden="true"></span></a></td>
+                            -->
+                            <td>
+                            <button class="buttonPlus" data-toggle="collapse"  data-target="#cone12">
+                                    <span class="glyphicon glyphicon-plus" style="color: #337ab7" ></span>
+                                </button></td>
+                        </tr>
+                        <tr style="border: 1px solid #ddd !important;">
+                            <td class="text-center"colspan="5">
+                                <div id="cone12" class="panel-collapse collapse">
+                                    <div class="panel-default panel-body" style="background-color: #ddd">
+                                        <div class="panel-default ">
+                                            
+                                                <table class="table table-condensed text-center">
+                                                    <thead style="font-weight:bold">
+                                                        <tr style="background-color: #fff">
+                                                            <td>Wind</td>
+                                                            <td>Humidity</td>
+                                                            <td>Visibility</td>
+                                                            <td>Pressure</td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr style="font-size: small;background-color: #ddd">
+                                                            <td><span id="wind12" ></span></td>
+                                                            <td><span id="humid12" ></span>%</td>
+                                                            <td><span id="visi12" ></span></td>
+                                                            <td><span id="pres12" ></span></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>	
+                        
+                        <tr class="text-center" style="border: 1px solid #ddd !important;">
+                            <td> <span id="time13" ></span></td>
+                            <td><img id="img13" src="" height="40px" title="" alt="" /></td>
+                            <td><span id="cover13" ></span>%</td>
+                            <td><span id="temp13" ></span></td>
+                           <!-- <td role="tab" id="hone"><a data-toggle="collapse" data-parent="#accordion" href="#cone13" aria-expanded="true" aria-controls="cone13" ><span class="glyphicon glyphicon-plus" style="color: #337ab7" aria-hidden="true"></span></a></td>
+                            -->
+                            <td>
+                            <button class="buttonPlus" data-toggle="collapse"  data-target="#cone13">
+                                    <span class="glyphicon glyphicon-plus" style="color: #337ab7" ></span>
+                                </button></td>
+                        </tr>
+                        <tr style="border: 1px solid #ddd !important;">
+                            <td class="text-center"colspan="5">
+                                <div id="cone13" class="panel-collapse collapse">
+                                    <div class="panel-default panel-body" style="background-color: #ddd">
+                                        <div class="panel-default ">
+                                            
+                                                <table class="table table-condensed text-center">
+                                                    <thead style="font-weight:bold">
+                                                        <tr style="background-color: #fff">
+                                                            <td>Wind</td>
+                                                            <td>Humidity</td>
+                                                            <td>Visibility</td>
+                                                            <td>Pressure</td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr style="font-size: small;background-color: #ddd">
+                                                            <td><span id="wind13" ></span></td>
+                                                            <td><span id="humid13" ></span>%</td>
+                                                            <td><span id="visi13" ></span></td>
+                                                            <td><span id="pres13" ></span></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>	
+                        
+                        <tr class="text-center" style="border: 1px solid #ddd !important;">
+                            <td> <span id="time14" ></span></td>
+                            <td><img id="img14" src="" height="40px" title="" alt="" /></td>
+                            <td><span id="cover14" ></span>%</td>
+                            <td><span id="temp14" ></span></td>
+                           <!-- <td role="tab" id="hone"><a data-toggle="collapse" data-parent="#accordion" href="#cone14" aria-expanded="true" aria-controls="cone14" ><span class="glyphicon glyphicon-plus" style="color: #337ab7" aria-hidden="true"></span></a></td>
+                            -->
+                            <td>
+                            <button class="buttonPlus" data-toggle="collapse"  data-target="#cone14">
+                                    <span class="glyphicon glyphicon-plus" style="color: #337ab7" ></span>
+                                </button></td>
+                        </tr>
+                        <tr style="border: 1px solid #ddd !important;">
+                            <td class="text-center"colspan="5">
+                                <div id="cone14" class="panel-collapse collapse">
+                                    <div class="panel-default panel-body" style="background-color: #ddd">
+                                        <div class="panel-default ">
+                                            
+                                                <table class="table table-condensed text-center">
+                                                    <thead style="font-weight:bold">
+                                                        <tr style="background-color: #fff">
+                                                            <td>Wind</td>
+                                                            <td>Humidity</td>
+                                                            <td>Visibility</td>
+                                                            <td>Pressure</td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr style="font-size: small;background-color: #ddd">
+                                                            <td><span id="wind14" ></span></td>
+                                                            <td><span id="humid14" ></span>%</td>
+                                                            <td><span id="visi14" ></span></td>
+                                                            <td><span id="pres14" ></span></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>	
+                        
+                        <tr class="text-center" style="border: 1px solid #ddd !important;">
+                            <td> <span id="time15" ></span></td>
+                            <td><img id="img15" src="" height="40px" title="" alt="" /></td>
+                            <td><span id="cover15" ></span>%</td>
+                            <td><span id="temp15" ></span></td>
+                           <!-- <td role="tab" id="hone"><a data-toggle="collapse" data-parent="#accordion" href="#cone15" aria-expanded="true" aria-controls="cone15" ><span class="glyphicon glyphicon-plus" style="color: #337ab7" aria-hidden="true"></span></a></td>
+                            -->
+                            <td>
+                            <button class="buttonPlus" data-toggle="collapse"  data-target="#cone15">
+                                    <span class="glyphicon glyphicon-plus" style="color: #337ab7" ></span>
+                                </button></td>
+                        </tr>
+                        <tr style="border: 1px solid #ddd !important;">
+                            <td class="text-center"colspan="5">
+                                <div id="cone15" class="panel-collapse collapse">
+                                    <div class="panel-default panel-body" style="background-color: #ddd">
+                                        <div class="panel-default ">
+                                            
+                                                <table class="table table-condensed text-center">
+                                                    <thead style="font-weight:bold">
+                                                        <tr style="background-color: #fff">
+                                                            <td>Wind</td>
+                                                            <td>Humidity</td>
+                                                            <td>Visibility</td>
+                                                            <td>Pressure</td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr style="font-size: small;background-color: #ddd">
+                                                            <td><span id="wind15" ></span></td>
+                                                            <td><span id="humid15" ></span>%</td>
+                                                            <td><span id="visi15" ></span></td>
+                                                            <td><span id="pres15" ></span></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>	
+                        
+                        <tr class="text-center" style="border: 1px solid #ddd !important;">
+                            <td> <span id="time16" ></span></td>
+                            <td><img id="img16" src="" height="40px" title="" alt="" /></td>
+                            <td><span id="cover16" ></span>%</td>
+                            <td><span id="temp16" ></span></td>
+                           <!-- <td role="tab" id="hone"><a data-toggle="collapse" data-parent="#accordion" href="#cone16" aria-expanded="true" aria-controls="cone16" ><span class="glyphicon glyphicon-plus" style="color: #337ab7" aria-hidden="true"></span></a></td>
+                            -->
+                            <td>
+                            <button class="buttonPlus" data-toggle="collapse"  data-target="#cone16">
+                                    <span class="glyphicon glyphicon-plus" style="color: #337ab7" ></span>
+                                </button></td>
+                        </tr>
+                        <tr style="border: 1px solid #ddd !important;">
+                            <td class="text-center"colspan="5">
+                                <div id="cone16" class="panel-collapse collapse">
+                                    <div class="panel-default panel-body" style="background-color: #ddd">
+                                        <div class="panel-default ">
+                                            
+                                                <table class="table table-condensed text-center">
+                                                    <thead style="font-weight:bold">
+                                                        <tr style="background-color: #fff">
+                                                            <td>Wind</td>
+                                                            <td>Humidity</td>
+                                                            <td>Visibility</td>
+                                                            <td>Pressure</td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr style="font-size: small;background-color: #ddd">
+                                                            <td><span id="wind16" ></span></td>
+                                                            <td><span id="humid16" ></span>%</td>
+                                                            <td><span id="visi16" ></span></td>
+                                                            <td><span id="pres16" ></span></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>	
+                        
+                        <tr class="text-center" style="border: 1px solid #ddd !important;">
+                            <td> <span id="time17" ></span></td>
+                            <td><img id="img17" src="" height="40px" title="" alt="" /></td>
+                            <td><span id="cover17" ></span>%</td>
+                            <td><span id="temp17" ></span></td>
+                           <!-- <td role="tab" id="hone"><a data-toggle="collapse" data-parent="#accordion" href="#cone17" aria-expanded="true" aria-controls="cone17" ><span class="glyphicon glyphicon-plus" style="color: #337ab7" aria-hidden="true"></span></a></td>
+                            -->
+                            <td>
+                            <button class="buttonPlus" data-toggle="collapse"  data-target="#cone17">
+                                    <span class="glyphicon glyphicon-plus" style="color: #337ab7" ></span>
+                                </button></td>
+                        </tr>
+                        <tr style="border: 1px solid #ddd !important;">
+                            <td class="text-center"colspan="5">
+                                <div id="cone17" class="panel-collapse collapse">
+                                    <div class="panel-default panel-body" style="background-color: #ddd">
+                                        <div class="panel-default ">
+                                            
+                                                <table class="table table-condensed text-center">
+                                                    <thead style="font-weight:bold">
+                                                        <tr style="background-color: #fff">
+                                                            <td>Wind</td>
+                                                            <td>Humidity</td>
+                                                            <td>Visibility</td>
+                                                            <td>Pressure</td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr style="font-size: small;background-color: #ddd">
+                                                            <td><span id="wind17" ></span></td>
+                                                            <td><span id="humid17" ></span>%</td>
+                                                            <td><span id="visi17" ></span></td>
+                                                            <td><span id="pres17" ></span></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>	
+                        
+                        <tr class="text-center" style="border: 1px solid #ddd !important;">
+                            <td> <span id="time18" ></span></td>
+                            <td><img id="img18" src="" height="40px" title="" alt="" /></td>
+                            <td><span id="cover18" ></span>%</td>
+                            <td><span id="temp18" ></span></td>
+                           <!-- <td role="tab" id="hone"><a data-toggle="collapse" data-parent="#accordion" href="#cone18" aria-expanded="true" aria-controls="cone18" ><span class="glyphicon glyphicon-plus" style="color: #337ab7" aria-hidden="true"></span></a></td>
+                            -->
+                            <td>
+                            <button class="buttonPlus" data-toggle="collapse"  data-target="#cone18">
+                                    <span class="glyphicon glyphicon-plus" style="color: #337ab7" ></span>
+                                </button></td>
+                        </tr>
+                        <tr style="border: 1px solid #ddd !important;">
+                            <td class="text-center"colspan="5">
+                                <div id="cone18" class="panel-collapse collapse">
+                                    <div class="panel-default panel-body" style="background-color: #ddd">
+                                        <div class="panel-default ">
+                                            
+                                                <table class="table table-condensed text-center">
+                                                    <thead style="font-weight:bold">
+                                                        <tr style="background-color: #fff">
+                                                            <td>Wind</td>
+                                                            <td>Humidity</td>
+                                                            <td>Visibility</td>
+                                                            <td>Pressure</td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr style="font-size: small;background-color: #ddd">
+                                                            <td><span id="wind18" ></span></td>
+                                                            <td><span id="humid18" ></span>%</td>
+                                                            <td><span id="visi18" ></span></td>
+                                                            <td><span id="pres18" ></span></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>	
+                        
+                        <tr class="text-center" style="border: 1px solid #ddd !important;">
+                            <td> <span id="time19" ></span></td>
+                            <td><img id="img19" src="" height="40px" title="" alt="" /></td>
+                            <td><span id="cover19" ></span>%</td>
+                            <td><span id="temp19" ></span></td>
+                           <!-- <td role="tab" id="hone"><a data-toggle="collapse" data-parent="#accordion" href="#cone19" aria-expanded="true" aria-controls="cone19" ><span class="glyphicon glyphicon-plus" style="color: #337ab7" aria-hidden="true"></span></a></td>
+                            -->
+                            <td>
+                            <button class="buttonPlus" data-toggle="collapse"  data-target="#cone19">
+                                    <span class="glyphicon glyphicon-plus" style="color: #337ab7" ></span>
+                                </button></td>
+                        </tr>
+                        <tr style="border: 1px solid #ddd !important;">
+                            <td class="text-center"colspan="5">
+                                <div id="cone19" class="panel-collapse collapse">
+                                    <div class="panel-default panel-body" style="background-color: #ddd">
+                                        <div class="panel-default ">
+                                            
+                                                <table class="table table-condensed text-center">
+                                                    <thead style="font-weight:bold">
+                                                        <tr style="background-color: #fff">
+                                                            <td>Wind</td>
+                                                            <td>Humidity</td>
+                                                            <td>Visibility</td>
+                                                            <td>Pressure</td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr style="font-size: small;background-color: #ddd">
+                                                            <td><span id="wind19" ></span></td>
+                                                            <td><span id="humid19" ></span>%</td>
+                                                            <td><span id="visi19" ></span></td>
+                                                            <td><span id="pres19" ></span></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>	
+                        
+                        <tr class="text-center" style="border: 1px solid #ddd !important;">
+                            <td> <span id="time20" ></span></td>
+                            <td><img id="img20" src="" height="40px" title="" alt="" /></td>
+                            <td><span id="cover20" ></span>%</td>
+                            <td><span id="temp20" ></span></td>
+                           <!-- <td role="tab" id="hone"><a data-toggle="collapse" data-parent="#accordion" href="#cone20" aria-expanded="true" aria-controls="cone20" ><span class="glyphicon glyphicon-plus" style="color: #337ab7" aria-hidden="true"></span></a></td>
+                            -->
+                            <td>
+                            <button class="buttonPlus" data-toggle="collapse"  data-target="#cone20">
+                                    <span class="glyphicon glyphicon-plus" style="color: #337ab7" ></span>
+                                </button></td>
+                        </tr>
+                        <tr style="border: 1px solid #ddd !important;">
+                            <td class="text-center"colspan="5">
+                                <div id="cone20" class="panel-collapse collapse">
+                                    <div class="panel-default panel-body" style="background-color: #ddd">
+                                        <div class="panel-default ">
+                                            
+                                                <table class="table table-condensed text-center">
+                                                    <thead style="font-weight:bold">
+                                                        <tr style="background-color: #fff">
+                                                            <td>Wind</td>
+                                                            <td>Humidity</td>
+                                                            <td>Visibility</td>
+                                                            <td>Pressure</td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr style="font-size: small;background-color: #ddd">
+                                                            <td><span id="wind20" ></span></td>
+                                                            <td><span id="humid20" ></span>%</td>
+                                                            <td><span id="visi20" ></span></td>
+                                                            <td><span id="pres20" ></span></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>	
+                        
+                        <tr class="text-center" style="border: 1px solid #ddd !important;">
+                            <td> <span id="time21" ></span></td>
+                            <td><img id="img21" src="" height="40px" title="" alt="" /></td>
+                            <td><span id="cover21" ></span>%</td>
+                            <td><span id="temp21" ></span></td>
+                           <!-- <td role="tab" id="hone"><a data-toggle="collapse" data-parent="#accordion" href="#cone21" aria-expanded="true" aria-controls="cone21" ><span class="glyphicon glyphicon-plus" style="color: #337ab7" aria-hidden="true"></span></a></td>
+                            -->
+                            <td>
+                            <button class="buttonPlus" data-toggle="collapse"  data-target="#cone21">
+                                    <span class="glyphicon glyphicon-plus" style="color: #337ab7" ></span>
+                                </button></td>
+                        </tr>
+                        <tr style="border: 1px solid #ddd !important;">
+                            <td class="text-center"colspan="5">
+                                <div id="cone21" class="panel-collapse collapse">
+                                    <div class="panel-default panel-body" style="background-color: #ddd">
+                                        <div class="panel-default ">
+                                            
+                                                <table class="table table-condensed text-center">
+                                                    <thead style="font-weight:bold">
+                                                        <tr style="background-color: #fff">
+                                                            <td>Wind</td>
+                                                            <td>Humidity</td>
+                                                            <td>Visibility</td>
+                                                            <td>Pressure</td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr style="font-size: small;background-color: #ddd">
+                                                            <td><span id="wind21" ></span></td>
+                                                            <td><span id="humid21" ></span>%</td>
+                                                            <td><span id="visi21" ></span></td>
+                                                            <td><span id="pres21" ></span></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>	
+                        
+                        <tr class="text-center" style="border: 1px solid #ddd !important;">
+                            <td> <span id="time22" ></span></td>
+                            <td><img id="img22" src="" height="40px" title="" alt="" /></td>
+                            <td><span id="cover22" ></span>%</td>
+                            <td><span id="temp22" ></span></td>
+                           <!-- <td role="tab" id="hone"><a data-toggle="collapse" data-parent="#accordion" href="#cone22" aria-expanded="true" aria-controls="cone22" ><span class="glyphicon glyphicon-plus" style="color: #337ab7" aria-hidden="true"></span></a></td>
+                            -->
+                            <td>
+                            <button class="buttonPlus" data-toggle="collapse"  data-target="#cone22">
+                                    <span class="glyphicon glyphicon-plus" style="color: #337ab7" ></span>
+                                </button></td>
+                        </tr>
+                        <tr style="border: 1px solid #ddd !important;">
+                            <td class="text-center"colspan="5">
+                                <div id="cone22" class="panel-collapse collapse">
+                                    <div class="panel-default panel-body" style="background-color: #ddd">
+                                        <div class="panel-default ">
+                                            
+                                                <table class="table table-condensed text-center">
+                                                    <thead style="font-weight:bold">
+                                                        <tr style="background-color: #fff">
+                                                            <td>Wind</td>
+                                                            <td>Humidity</td>
+                                                            <td>Visibility</td>
+                                                            <td>Pressure</td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr style="font-size: small;background-color: #ddd">
+                                                            <td><span id="wind22" ></span></td>
+                                                            <td><span id="humid22" ></span>%</td>
+                                                            <td><span id="visi22" ></span></td>
+                                                            <td><span id="pres22" ></span></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>	
+                        
+                        <tr class="text-center" style="border: 1px solid #ddd !important;">
+                            <td> <span id="time23" ></span></td>
+                            <td><img id="img23" src="" height="40px" title="" alt="" /></td>
+                            <td><span id="cover23" ></span>%</td>
+                            <td><span id="temp23" ></span></td>
+                           <!-- <td role="tab" id="hone"><a data-toggle="collapse" data-parent="#accordion" href="#cone23" aria-expanded="true" aria-controls="cone23" ><span class="glyphicon glyphicon-plus" style="color: #337ab7" aria-hidden="true"></span></a></td>
+                            -->
+                            <td>
+                            <button class="buttonPlus" data-toggle="collapse"  data-target="#cone23">
+                                    <span class="glyphicon glyphicon-plus" style="color: #337ab7" ></span>
+                                </button></td>
+                        </tr>
+                        <tr style="border: 1px solid #ddd !important;">
+                            <td class="text-center"colspan="5">
+                                <div id="cone23" class="panel-collapse collapse">
+                                    <div class="panel-default panel-body" style="background-color: #ddd">
+                                        <div class="panel-default ">
+                                            
+                                                <table class="table table-condensed text-center">
+                                                    <thead style="font-weight:bold">
+                                                        <tr style="background-color: #fff">
+                                                            <td>Wind</td>
+                                                            <td>Humidity</td>
+                                                            <td>Visibility</td>
+                                                            <td>Pressure</td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr style="font-size: small;background-color: #ddd">
+                                                            <td><span id="wind23" ></span></td>
+                                                            <td><span id="humid23" ></span>%</td>
+                                                            <td><span id="visi23" ></span></td>
+                                                            <td><span id="pres23" ></span></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>	
+                        
+                        <tr class="text-center" style="border: 1px solid #ddd !important;">
+                            <td> <span id="time24" ></span></td>
+                            <td><img id="img24" src="" height="40px" title="" alt="" /></td>
+                            <td><span id="cover24" ></span>%</td>
+                            <td><span id="temp24" ></span></td>
+                           <!-- <td role="tab" id="hone"><a data-toggle="collapse" data-parent="#accordion" href="#cone24" aria-expanded="true" aria-controls="cone24" ><span class="glyphicon glyphicon-plus" style="color: #337ab7" aria-hidden="true"></span></a></td>
+                            -->
+                            <td>
+                            <button class="buttonPlus" data-toggle="collapse"  data-target="#cone24">
+                                    <span class="glyphicon glyphicon-plus" style="color: #337ab7" ></span>
+                                </button></td>
+                        </tr>
+                        <tr style="border: 1px solid #ddd !important;">
+                            <td class="text-center"colspan="5">
+                                <div id="cone24" class="panel-collapse collapse">
+                                    <div class="panel-default panel-body" style="background-color: #ddd">
+                                        <div class="panel-default ">
+                                            
+                                                <table class="table table-condensed text-center">
+                                                    <thead style="font-weight:bold">
+                                                        <tr style="background-color: #fff">
+                                                            <td>Wind</td>
+                                                            <td>Humidity</td>
+                                                            <td>Visibility</td>
+                                                            <td>Pressure</td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr style="font-size: small;background-color: #ddd">
+                                                            <td><span id="wind24" ></span></td>
+                                                            <td><span id="humid24" ></span>%</td>
+                                                            <td><span id="visi24" ></span></td>
+                                                            <td><span id="pres24" ></span></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>	
+                        
+
+                        
+                        
+                     </tr>   
+                    </table>
+                    </div>
+				</div>
+				<div role="tabpanel" class="tab-pane fade" id="NextDaysTab">
+						<div id="days_color" class="form-inline" style="background-color: #000">
+							<div style="padding:2% 0% 0% 0%">
+								<div class="form-group" style="padding: 0% 0.5%" data-toggle="modal" data-target="#detailmodal" onclick="modalDialogDisplay(1);">
+									<table class="table-condensed table text-center daily_table" style="background-color: #005b99;border-width:0px;">
+										<tr>
+											<td><label id="day71" style="color:white;"></label></td>
+										</tr>
+										<tr>
+											<td><label id ="mon71" style="color:white;"></label></td>
+										</tr>
+										<tr>
+											<td><img id="img71"src="" width="80px" /></td>
+										</tr>
+										<tr>
+											<td><label style="color:white;">Min</label>
+											<br>
+											<label style="color:white;">Temp</label></td>
+										</tr>
+										<tr>
+											<td><label id="mint71" style="font-size: 30px;color:white;" ></label></td>
+										</tr>
+										<tr>
+											<td><label style="color:white;">Max</label>
+											<br>
+											<label style="color:white;">Temp</label></td>
+										</tr>
+										<tr>
+											<td><label id="maxt71" style="font-size: 30px;color:white;"></label></td>
+										</tr>
+										<!--
+										<p id="day71" style="font-weight:bold;color:white;"></p> <br/>
+										<p id ="mon71"style="font-weight:bold;color:white;"></p> <br/>
+										<p><img id="img71" src="" height="50px" title="" alt="" /></p> <br/>
+										<p style="font-weight:bold;color:white;">Min</p><br/><p style="font-weight:bold;color:white;"> Temp</p> <br/>
+										<p id="mint71" class="temp"></p> <br/>
+										<p style="font-weight:bold;color:white;">Max</p> <br/> Temp</p> <br/>
+										<p id="maxt71" class="temp"></p>
+										-->
+									</table>
+								</div>
+								<div class="form-group" style="padding: 0% 0.5%" data-toggle="modal" data-target="#detailmodal" onclick="modalDialogDisplay(2);">
+									<table class="table table-condensed text-center daily_table" style="background-color: #ff1a1a;-moz-border-radius: 5px;
+									-webkit-border-radius: 5px; border-radius: 5px;border: none;border-collapse: collapse;">
+										<tr>
+											<td><label id="day72" style="color:white;"></label></td>
+										</tr>
+										<tr>
+											<td><label id ="mon72" style="color:white;"></label></td>
+										</tr>
+										<tr>
+											<td><img id="img72"src="" width="80px" /></td>
+										</tr>
+										<tr>
+											<td><label style="color:white;">Min</label>
+											<br>
+											<label style="color:white;">Temp</label></td>
+										</tr>
+										<tr>
+											<td><label id="mint72" style="font-size: 30px;color:white;" ></label></td>
+										</tr>
+										<tr>
+											<td><label style="color:white;">Max</label>
+											<br>
+											<label style="color:white;">Temp</label></td>
+										</tr>
+										<tr>
+											<td><label id="maxt72" style="font-size: 30px;color:white;"></label></td>
+										</tr>
+									</table>
+								</div>
+								<div class="form-group" style="padding: 0% 0.5%" data-toggle="modal" data-target="#detailmodal" onclick="modalDialogDisplay(3);">
+									<table class="table table-condensed text-center daily_table" style="background-color: #ff8d1a;-moz-border-radius: 5px;
+									-webkit-border-radius: 5px; border-radius: 5px;border: none;border-collapse: collapse;">
+										<tr>
+											<td><label id="day73" style="color:white;"></label></td>
+										</tr>
+										<tr>
+											<td><label id ="mon73" style="color:white;"></label></td>
+										</tr>
+										<tr>
+											<td><img id="img73"src="" width="80px" /></td>
+										</tr>
+										<tr>
+											<td><label style="color:white;">Min</label>
+											<br>
+											<label style="color:white;">Temp</label></td>
+										</tr>
+										<tr>
+											<td><label id="mint73" style="font-size: 30px;color:white;" ></label></td>
+										</tr>
+										<tr>
+											<td><label style="color:white;">Max</label>
+											<br>
+											<label style="color:white;">Temp</label></td>
+										</tr>
+										<tr>
+											<td><label id="maxt73" style="font-size: 30px;color:white;"></label></td>
+										</tr>
+									</table>
+								</div>
+								<div class="form-group" style="padding: 0% 0.5%" data-toggle="modal" data-target="#detailmodal"  onclick="modalDialogDisplay(4);">
+									<table class="table table-condensed text-center daily_table" style="background-color: #979900;-moz-border-radius: 5px;
+									-webkit-border-radius: 5px; border-radius: 5px;border: none;border-collapse: collapse;">
+										<tr>
+											<td><label id="day74" style="color:white;"></label></td>
+										</tr>
+										<tr>
+											<td><label id ="mon74" style="color:white;"></label></td>
+										</tr>
+										<tr>
+											<td><img id="img74"src="" width="80px" /></td>
+										</tr>
+										<tr>
+											<td><label style="color:white;">Min</label>
+											<br>
+											<label style="color:white;">Temp</label></td>
+										</tr>
+										<tr>
+											<td><label id="mint74" style="font-size: 30px;color:white;" ></label></td>
+										</tr>
+										<tr>
+											<td><label style="color:white;">Max</label>
+											<br>
+											<label style="color:white;">Temp</label></td>
+										</tr>
+										<tr>
+											<td><label id="maxt74" style="font-size: 30px;color:white;"></label></td>
+										</tr>
+									</table>
+								</div>
+								<div class="form-group" style="padding: 0% 0.5%" data-toggle="modal" data-target="#detailmodal" onclick="modalDialogDisplay(5);">
+									<table class="table table-condensed text-center daily_table" style="background-color: #4f149f;-moz-border-radius: 5px;
+									-webkit-border-radius: 5px; border-radius: 5px;border: none;border-collapse: collapse;">
+										<tr>
+											<td><label id="day75" style="color:white;"></label></td>
+										</tr>
+										<tr>
+											<td><label id ="mon75" style="color:white;"></label></td>
+										</tr>
+										<tr>
+											<td><img id="img75"src="" width="80px" /></td>
+										</tr>
+										<tr>
+											<td><label style="color:white;">Min</label>
+											<br>
+											<label style="color:white;">Temp</label></td>
+										</tr>
+										<tr>
+											<td><label id="mint75" style="font-size: 30px;color:white;" ></label></td>
+										</tr>
+										<tr>
+											<td><label style="color:white;">Max</label>
+											<br>
+											<label style="color:white;">Temp</label></td>
+										</tr>
+										<tr>
+											<td><label id="maxt75" style="font-size: 30px;color:white;"></label></td>
+										</tr>
+									</table>
+								</div>
+								<div class="form-group" style="padding: 0% 0.5%" data-toggle="modal" data-target="#detailmodal" onclick="modalDialogDisplay(6);">
+									<table class="table table-condensed text-center daily_table" style="background-color: #ffa266;-moz-border-radius: 5px;
+									-webkit-border-radius: 5px; border-radius: 5px;border: none;border-collapse: collapse;">
+										<tr>
+											<td><label id="day76" style="color:white;"></label></td>
+										</tr>
+										<tr>
+											<td><label id ="mon76" style="color:white;"></label></td>
+										</tr>
+										<tr>
+											<td><img id="img76"src="" width="80px" /></td>
+										</tr>
+										<tr>
+											<td><label style="color:white;">Min</label>
+											<br>
+											<label style="color:white;">Temp</label></td>
+										</tr>
+										<tr>
+											<td><label id="mint76" style="font-size: 30px;color:white;" ></label></td>
+										</tr>
+										<tr>
+											<td><label style="color:white;">Max</label>
+											<br>
+											<label style="color:white;">Temp</label></td>
+										</tr>
+										<tr>
+											<td><label id="maxt76" style="font-size: 30px;color:white;"></label></td>
+										</tr>
+									</table>
+								</div>
+								<div class="form-group" style="padding: 0% 0.5%" data-toggle="modal" data-target="#detailmodal"onclick="modalDialogDisplay(7);">
+									<table class="table table-condensed text-center daily_table" style="background-color: #e6004b;-moz-border-radius: 5px;
+									-webkit-border-radius: 5px; border-radius: 5px;border: none;border-collapse: collapse;">
+										<tr>
+											<td><label id="day77" style="color:white;"></label></td>
+										</tr>
+										<tr>
+											<td><label id ="mon77" style="color:white;"></label></td>
+										</tr>
+										<tr>
+											<td><img id="img77"src="" width="80px" /></td>
+										</tr>
+										<tr>
+											<td><label style="color:white;">Min</label>
+											<br>
+											<label style="color:white;">Temp</label></td>
+										</tr>
+										<tr>
+											<td><label id="mint77" style="font-size: 30px;color:white;" ></label></td>
+										</tr>
+										<tr>
+											<td><label style="color:white;">Max</label>
+											<br>
+											<label style="color:white;">Temp</label></td>
+										</tr>
+										<tr>
+											<td><label id="maxt77" style="font-size: 30px;color:white;"></label></td>
+										</tr>
+									</table>
+								</div>
+							</div>
+						</div>
+
+						<!-- Modal -->
+						<div class="modal fade" id="detailmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+							<div class="modal-dialog" role="document" style="background-color: #f0ad4e">
+								<div class="modal-content">
+									<div class="modal-header" style="align:left">
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										</button>
+										<h4 class="modal-title text-left" id="exampleModalLabel"></h4>
+									</div>
+									<div class="modal-body">
+										<div class="row">
+											<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+												<img id="imgmdl" src="" height="125px" title="" alt="" />
+											</div>
+										</div>
+
+										<div class="row report">
+											<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+												<h3><b><span id="daymdl"></span>: <span id="reportmdl" class="reportmdl"  style="color: orange"></span></b></h3>
+											</div>
+										</div>
+
+										<div class="row">
+											<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+												<p>
+													<b>Sunrise Time</b>
+												</p>
+												<p>
+													<span id="risemdl"></span>
+												</p>
+											</div>
+											<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+												<p>
+													<b>Sunset Time</b>
+												</p>
+												<p>
+													<span id="setmdl"></span>
+												</p>
+											</div>
+											<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+												<p>
+													<b>Humidity</b>
+												</p>
+												<p>
+													<span id="humidmdl"></span>%
+												</p>
+											</div>
+										</div>
+
+										<div class="row">
+											<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+												<p>
+													<b>Wind Speed</b>
+												</p>
+												<p>
+													<span id="windmdl"></span>
+												</p>
+											</div>
+											<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+												<p>
+													<b>Visibility</b>
+												</p>
+												<p>
+													<span id="visimdl"></span>
+												</p>
+											</div>
+											<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+												<p>
+													<b>Pressure</b>
+												</p>
+												<p>
+													<span id="presmdl"></span>
+												</p>
+											</div>
+										</div>
+									</div>
+
+									<div class="modal-footer">
+										<button type="button" class="btn btn-default" data-dismiss="modal">
+											Close
+										</button>
+									</div>
+								</div>
+							</div>
+
+						</div>
+
+					</div>
+			</div>
+		</div>
+    </div>
+		<script type="text/javascript" >
+        var fbpic;
+        var fbname;
+        var fbdesc;
+        var fbcaption;
+        
+        var offset = null;//For timezone
+        //VALIDATION BEGIN
+			$("#searchForm").validate({
+				rules : {
+					StreetAddress : "required",
+					CityName : "required",
+					state : "required"
+				},
+				messages : {
+					StreetAddress : {
+						required : "Please enter the street address"
+					},
+					CityName : "Please enter the city",
+					state : "Please select a state"
+				},
+				errorPlacement : function(error, element) {
+
+					if (element.attr("name") == "StreetAddress")
+						$("#errorcontainer-street").html(error);
+					else if (element.attr("name") == "CityName")
+						$("#errorcontainer-city").html(error);
+					else
+						$("#errorcontainer-state").html(error);
+				},
+				submitHandler : function(form) {
+					$.ajax({
+					type : "GET",
+					dataType : "json",
+					url : "forecastHW8.php", //Relative or absolute path to response.php file
+					data : {
+						StreetAddress : $('#StreetAddress').val(),
+						CityName : $('#CityName').val(),
+						state : $('#state').val(),
+						degrees : $('input:radio[name=degrees]:checked').val()
+					},
+					success : function(output) {
+                        $("#result").removeClass("hidden");
+                        $("#MapLocation").html("");
+                        
+                        $("#NextHoursTab").removeClass("active");
+                        $("#NextDaysTab").removeClass("active");
+                        $("#RightNow").addClass("active");
+                        $("#RightNow").addClass("in");
+                        $("#RightNowAnch").click();
+                        offset = output.offset;
+                        
+						rightnowData(output);
+                        hourlyData(output);
+                        dailyData(output);
+					},
+					error : function() {
+						alert("the data transmission failed !");
+					}
+				});
+				}
+				// error.appendTo('#errorcontainer-city' + element.attr('id'));
+
+			});
+            //VALIDATION END
+            
+            //CLEAR BUTTON BEGIN
+            
+            //CLEAR BUTTON END
+            
+            //RIGHT NOW TAB BEGIN
+            function rightnowData(output)
+            {
+                createMap(output); 
+                console.log(output);
+                var degree = $('input:radio[name=degrees]:checked').val();
+                if(degree == 'us')
+                {
+                    var temperatureUnit = 'F';
+                    var windUnit = 'mph';
+                    var visibilityUnit = 'mi';
+                }
+                else 
+                {
+                    var temperatureUnit = 'C';
+                    var windUnit = 'm/s';
+                    var visibilityUnit = 'km';
+                }
+                $('#temperature').html(Math.round(output['currently']['temperature']));
+                $('#temperature').css("color","white");
+                $('#temperatureUnit').html('&deg' + temperatureUnit);
+                //var summary = output['currently']['summary'];
+                var precipInten = output['currently']['precipIntensity'];
+                if(output['currently']['icon']=='clear-day')
+                {
+                    imgIcon='http://cs-server.usc.edu:45678/hw/hw8/images/clear.png';
+                }
+                else if(output['currently']['icon']=='clear-night')
+                {
+                    imgIcon='http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png';
+                }
+                else if(output['currently']['icon']=='rain')
+                {
+                    imgIcon='http://cs-server.usc.edu:45678/hw/hw8/images/rain.png';
+                }
+                else if(output['currently']['icon']=='snow')
+                {
+                    imgIcon='http://cs-server.usc.edu:45678/hw/hw8/images/snow.png';
+                }
+                else if(output['currently']['icon']=='sleet')
+                {
+                    imgIcon='http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png';
+                }
+                else if(output['currently']['icon']=='wind')
+                {
+                    imgIcon='http://cs-server.usc.edu:45678/hw/hw8/images/wind.png';
+                }
+                else if(output['currently']['icon']=='fog')
+                {
+                    imgIcon='http://cs-server.usc.edu:45678/hw/hw8/images/fog.png';
+                }
+                else if(output['currently']['icon']=='cloudy')
+                {
+                    imgIcon='http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png';
+                }
+                else if(output['currently']['icon']=='partly-cloudy-day')
+                {
+                    imgIcon='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png';
+                }
+                else if(output['currently']['icon']=='partly-cloudy-night')
+                {
+                    imgIcon='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png';
+                }
+                
+                if( degree == "si" )
+                    precipInten = precipInten / 25.4;
+
+                if( 0 <= precipInten && precipInten < 0.002 )
+                    precipIntenval = "None";
+                else if( 0.002 <= precipInten && precipInten < 0.017 )
+                    precipIntenval = "Very Light";
+                else if( 0.017 <= precipInten && precipInten < 0.1 )
+                    precipIntenval = "Light";
+                else if( 0.1 <= precipInten && precipInten < 0.4 )
+                    precipIntenval = "Moderate";
+                else if( 0.4 <= precipInten )
+                    precipIntenval = "Heavy";
+
+                $('#WeatherIcon').attr('src', imgIcon);
+                $('#WeatherIcon').attr('title', output['currently']['summary']);
+                $('#WeatherIcon').attr('alt', output['currently']['summary']);
+
+                $('#WeatherSummary').html(output['currently']['summary'] + " in " + $('#CityName').val() + ", " + $('#state').val());
+                $('#WeatherSummary').css("color","white");
+                $('#low_temp').html('L: ' + Math.round(output['daily']['data'][0]['temperatureMin']) + '&deg;');
+                $('#high_temp').html('H: ' + Math.round(output['daily']['data'][0]['temperatureMax']) + '&deg;');
+
+                $('#PrecipNow').html(precipIntenval);
+                $('#RainNow').html(output['currently']['precipProbability']);
+                $('#WindNow').html(output['currently']['windSpeed'] + ' ' + windUnit);
+                $('#DewNow').html(output['currently']['dewPoint'] + '&deg;' + temperatureUnit);
+                $('#HumidNow').html(Math.round(output['currently']['humidity'] * 100));
+                $('#VisiNow').html(output['currently']['visibility'] + ' ' + visibilityUnit);
+                //date('h:i A',$weatherData->daily->data[0]->sunriseTime);
+               // var SunriseTime=date('h:i A',output['daily']['data'][0]['sunriseTime']);
+                //$('#SunriseNow').html(SunriseTime);
+                $('#SunriseNow').html(convertTime(output['daily']['data'][0]['sunriseTime'],offset));
+                $('#SunsetNow').html(convertTime(output['daily']['data'][0]['sunsetTime'],offset));
+
+                fbpic = imgIcon;
+                
+                fbname = 'Current Weather in ' + $('#CityName').val() + ', ' + $('#state').val();
+                fbdesc = output['currently']['summary'] + ', ' + Math.round(output['currently']['temperature']) + '&deg;' + temperatureUnit;
+                fbcaption = 'WEATHER INFORMATION FROM FORECAST.IO';
+ 
+            }
+
+            //RIGHT NOW TAB END
+            
+            //24Hours BEGIN
+            function hourlyData(output)
+            {
+                var deg = $('input:radio[name=degrees]:checked').val();
+                if(deg == 'us')
+                {
+                    var temperatureDeg = 'F';
+                    var windunit = 'mph';
+                    var visiunit = 'mi';
+                    var presunit = 'mb';
+                }
+                else if(deg == 'si')
+                {
+                    var temperatureDeg = 'C';
+                    var windunit = 'm/s';
+                    var visiunit = 'km';
+                    var presunit = 'hPa';
+                }
+
+                var hourly = output['hourly']['data'];
+                for(var i=1; i<=24; i++)
+                {
+                   // j = i+1;
+                    $('#tmp24head').html(temperatureDeg);
+                    $('#time'+i).html( convertTime(hourly[i]['time'],offset) );
+                    if(hourly[i]['icon']=='clear-day')
+                {
+                    imgIcon='http://cs-server.usc.edu:45678/hw/hw8/images/clear.png';
+                    
+                }
+                else if(hourly[i]['icon']=='clear-night')
+                {
+                    imgIcon='http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png';
+                }
+                else if(hourly[i]['icon']=='rain')
+                {
+                    imgIcon='http://cs-server.usc.edu:45678/hw/hw8/images/rain.png';
+                }
+                else if(hourly[i]['icon']=='snow')
+                {
+                    imgIcon='http://cs-server.usc.edu:45678/hw/hw8/images/snow.png';
+                }
+                else if(hourly[i]['icon']=='sleet')
+                {
+                    imgIcon='http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png';
+                }
+                else if(hourly[i]['icon']=='wind')
+                {
+                    imgIcon='http://cs-server.usc.edu:45678/hw/hw8/images/wind.png';
+                }
+                else if(hourly[i]['icon']=='fog')
+                {
+                    imgIcon='http://cs-server.usc.edu:45678/hw/hw8/images/fog.png';
+                }
+                else if(hourly[i]['icon']=='cloudy')
+                {
+                    imgIcon='http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png';
+                }
+                else if(hourly[i]['icon']=='partly-cloudy-day')
+                {
+                    imgIcon='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png';
+                }
+                else if(hourly[i]['icon']=='partly-cloudy-night')
+                {
+                    imgIcon='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png';
+                }
+                    $('#img'+i).attr('src', imgIcon );
+                    $('#img'+i).attr('title', hourly[i]['summary'] );
+                    $('#img'+i).attr('alt', hourly[i]['summary'] );
+                    
+                    $('#cover'+i).html( Math.round(hourly[i]['cloudCover']) );
+                    $('#temp'+i).html( hourly[i]['temperature'] );
+                    $('#wind'+i).html( hourly[i]['windSpeed'] + ' ' + windunit );
+                    $('#humid'+i).html( Math.round(hourly[i]['humidity'] * 100) );
+                    if(typeof(hourly[i]['visibility'])=='undefined')
+                    {
+                        $('#visi'+i).html( 'N.A');
+                    }
+                    else
+                    {
+                        $('#visi'+i).html( hourly[i]['visibility'] + ' ' + visiunit );
+                    }
+                    
+                    $('#pres'+i).html( hourly[i]['pressure'] + ' ' + presunit );
+                }
+            }
+            //24Hours END
+            
+            //COnvert TIME
+            function convertTime(unix_timestamp,offset)
+            {
+                var date = new Date(unix_timestamp*1000);
+                var units = 'AM';
+                if (offset == null) {
+					hours = date.getHours();
+					minutes = date.getMinutes();
+				} else {
+					utc = date.getTime() + (date.getTimezoneOffset() * 60000);
+
+					// create new Date object for different city
+					// using supplied offset
+					newdate = new Date(utc + (3600000 * offset));
+					hours = newdate.getHours();
+					minutes = newdate.getMinutes();
+				}
+                if(hours>12)
+                {
+                    hours=hours-12;
+                    units='PM';
+                }
+                if (hours<=9)
+                {
+                    hours = "0"+hours;
+                }
+                var minutes = "0" + date.getMinutes();
+                var formattedTime = hours + ':' + minutes.substr(-2)+' '+units;
+               // var tempTime=new Date(unix_timestamp * 1000);
+                //formattedTime=tempTime.format('h:i A');
+                return formattedTime;
+            }
+            //CONVERT TIME END
+            
+            //MODAL BEGIN
+            
+            function modalDialogDisplay(i)
+            {
+              var tempDate = new Date(daily[i]['time']*1000);
+                    var date = tempDate.getDate();
+                    var month = tempDate.getMonth();
+                    var day= tempDate.getDay();
+                var city = $('#CityName').val();
+                var deg = $('input:radio[name=degrees]:checked').val();
+                if(deg == 'us')
+                {
+                    var sym = 'F';
+                    var windunit = 'mph';
+                    var visiunit = 'mi';
+                    var presunit = 'mb';
+                }
+                else if(deg == 'si')
+                {
+                    var sym = 'C';
+                    var windunit = 'm/s';
+                    var visiunit = 'km';
+                    var presunit = 'hPa';
+                }
+
+               
+                //LOGIC for MONTH
+                  
+                    if(month==0)
+                    {
+                        monthWord='Jan';
+                    }
+                    else if(month==1)
+                    {
+                        monthWord='Feb';
+                    }
+                    else if(month==2)
+                    {
+                        monthWord='Mar';
+                    }
+                    else if(month==3)
+                    {
+                        monthWord='Apr';
+                    }
+                    else if(month==4)
+                    {
+                        monthWord='May';
+                    }
+                    else if(month==5)
+                    {
+                        monthWord='Jun';
+                    }
+                    else if(month==6)
+                    {
+                        monthWord='Jul';
+                    }
+                    else if(month==7)
+                    {
+                        monthWord='Aug';
+                    }
+                    else if(month==8)
+                    {
+                        monthWord='Sep';
+                    }
+                    else if(month==9)
+                    {
+                        monthWord='Oct';
+                    }
+                    else if(month==10)
+                    {
+                        monthWord='Nov';
+                    }
+                    else if(month==11)
+                    {
+                        monthWord='Dec';
+                    }
+                    
+                    //MONTH ENDS
+                     $('.modal-title').html('Weather in ' + city + ' on ' +  monthWord + ' ' + date);
+                     $('.modal-title').css({"color":"black","font-weight": "bold"});
+                     
+                     if(daily[i]['icon']=='clear-day')
+                {
+                    imgIcon='http://cs-server.usc.edu:45678/hw/hw8/images/clear.png';
+                }
+                else if(daily[i]['icon']=='clear-night')
+                {
+                    imgIcon='http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png';
+                }
+                else if(daily[i]['icon']=='rain')
+                {
+                    imgIcon='http://cs-server.usc.edu:45678/hw/hw8/images/rain.png';
+                }
+                else if(daily[i]['icon']=='snow')
+                {
+                    imgIcon='http://cs-server.usc.edu:45678/hw/hw8/images/snow.png';
+                }
+                else if(daily[i]['icon']=='sleet')
+                {
+                    imgIcon='http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png';
+                }
+                else if(daily[i]['icon']=='wind')
+                {
+                    imgIcon='http://cs-server.usc.edu:45678/hw/hw8/images/wind.png';
+                }
+                else if(daily[i]['icon']=='fog')
+                {
+                    imgIcon='http://cs-server.usc.edu:45678/hw/hw8/images/fog.png';
+                }
+                else if(daily[i]['icon']=='cloudy')
+                {
+                    imgIcon='http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png';
+                }
+                else if(daily[i]['icon']=='partly-cloudy-day')
+                {
+                    imgIcon='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png';
+                }
+                else if(daily[i]['icon']=='partly-cloudy-night')
+                {
+                    imgIcon='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png';
+                }
+                $('#imgmdl').attr('src', imgIcon );
+                $('#imgmdl').attr('title', daily[i]['summary'] );
+                $('#imgmdl').attr('alt', daily[i]['summary'] );
+                
+                if(day==0)
+                {
+                    dayword='Sunday';
+                }
+                else if(day==1)
+                {
+                    dayword='Monday';
+                }
+                else if(day==2)
+                {
+                    dayword='Tuesday';
+                }
+                else if(day==3)
+                {
+                    dayword='Wednesday';
+                }
+                else if(day==4)
+                {
+                    dayword='Thursday';
+                }
+                else if(day==5)
+                {
+                    dayword='Friday';
+                }
+                else if(day==6)
+                {
+                    dayword='Saturday';
+                }
+                
+                $('#daymdl').html(dayword);
+                $('#reportmdl').html(daily[i]['summary']);
+                $('#risemdl').html( convertTime(daily[i]['sunriseTime']) );
+                $('#setmdl').html( convertTime(daily[i]['sunsetTime']) );
+                $('#humidmdl').html( Math.round(daily[i]['humidity'] * 100) );
+                $('#windmdl').html( daily[i]['windSpeed'] + ' ' + windunit );
+                if(typeof(daily[i]['visibility'])=='undefined')
+                {
+                    $('#visimdl').html( 'N.A');
+                }
+                else
+                {
+                    $('#visimdl').html( daily[i]['visibility'] + ' ' + visiunit );
+                }
+                $('#presmdl').html( daily[i]['pressure'] + ' ' + presunit );
+            }
+            //MODAL END`
+            
+            //DAILY BEGIN
+            function dailyData(data)
+            {
+                daily = data['daily']['data'];
+                for(var i=1; i<=7; i++)
+                {
+                var tempDate = new Date(daily[i]['time']*1000);
+                    //var date = tempDate.getDate();
+                    //var month = tempDate.getMonth();
+                    var day= tempDate.getDay();
+                
+                    if(day==0)
+                {
+                    dayword='Sunday';
+                }
+                else if(day==1)
+                {
+                    dayword='Monday';
+                }
+                else if(day==2)
+                {
+                    dayword='Tuesday';
+                }
+                else if(day==3)
+                {
+                    dayword='Wednesday';
+                }
+                else if(day==4)
+                {
+                    dayword='Thursday';
+                }
+                else if(day==5)
+                {
+                    dayword='Friday';
+                }
+                else if(day==6)
+                {
+                    dayword='Saturday';
+                }
+                    $('#day7'+i).html( dayword);
+                    
+                    //LOGIC for MONTH
+                    var tempDate = new Date(daily[i]['time']*1000);
+                    var date = tempDate.getDate();
+                    var month = tempDate.getMonth();
+                    if(month==0)
+                    {
+                        monthWord='Jan';
+                    }
+                    else if(month==1)
+                    {
+                        monthWord='Feb';
+                    }
+                    else if(month==2)
+                    {
+                        monthWord='Mar';
+                    }
+                    else if(month==3)
+                    {
+                        monthWord='Apr';
+                    }
+                    else if(month==4)
+                    {
+                        monthWord='May';
+                    }
+                    else if(month==5)
+                    {
+                        monthWord='Jun';
+                    }
+                    else if(month==6)
+                    {
+                        monthWord='Jul';
+                    }
+                    else if(month==7)
+                    {
+                        monthWord='Aug';
+                    }
+                    else if(month==8)
+                    {
+                        monthWord='Sep';
+                    }
+                    else if(month==9)
+                    {
+                        monthWord='Oct';
+                    }
+                    else if(month==10)
+                    {
+                        monthWord='Nov';
+                    }
+                    else if(month==11)
+                    {
+                        monthWord='Dec';
+                    }
+                    $('#mon7'+i).html( monthWord + ' ' + date); 
+                    //MONTH ENDS
+                    
+                    
+                    
+                if(daily[i]['icon']=='clear-day')
+                {
+                    imgIcon='http://cs-server.usc.edu:45678/hw/hw8/images/clear.png';
+                }
+                else if(daily[i]['icon']=='clear-night')
+                {
+                    imgIcon='http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png';
+                }
+                else if(daily[i]['icon']=='rain')
+                {
+                    imgIcon='http://cs-server.usc.edu:45678/hw/hw8/images/rain.png';
+                }
+                else if(daily[i]['icon']=='snow')
+                {
+                    imgIcon='http://cs-server.usc.edu:45678/hw/hw8/images/snow.png';
+                }
+                else if(daily[i]['icon']=='sleet')
+                {
+                    imgIcon='http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png';
+                }
+                else if(daily[i]['icon']=='wind')
+                {
+                    imgIcon='http://cs-server.usc.edu:45678/hw/hw8/images/wind.png';
+                }
+                else if(daily[i]['icon']=='fog')
+                {
+                    imgIcon='http://cs-server.usc.edu:45678/hw/hw8/images/fog.png';
+                }
+                else if(daily[i]['icon']=='cloudy')
+                {
+                    imgIcon='http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png';
+                }
+                else if(daily[i]['icon']=='partly-cloudy-day')
+                {
+                    imgIcon='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png';
+                }
+                else if(daily[i]['icon']=='partly-cloudy-night')
+                {
+                    imgIcon='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png';
+                }
+                $('#img7'+i).attr('src',imgIcon);
+                    $('#img7'+i).attr('title', daily[i]['summary'] );
+                    $('#img7'+i).attr('alt', daily[i]['summary'] );
+                    $('#mint7'+i).html( Math.round(daily[i]['temperatureMin']) + '&deg;');
+                    $('#maxt7'+i).html( Math.round(daily[i]['temperatureMax']) + '&deg;');
+                }
+            }
+            //DAILY END
+            
+            //OpenLayers MAP BEGIN
+            function createMap(data) {
+                //console.log();
+                var lat = data["latitude"];
+                var lon = data["longitude"];
+                
+                //PROJECTIONS
+                var begin = new OpenLayers.Projection("EPSG:4326");
+				var end = new OpenLayers.Projection("EPSG:900913");
+
+                var lonlat = new OpenLayers.LonLat(lon, lat).transform(begin, end);
+				var map = new OpenLayers.Map("MapLocation");
+                
+                // Create OSM overlays
+                var mapnik = new OpenLayers.Layer.OSM();
+
+                // Create Cloud Layer
+                var layer_cloud = new OpenLayers.Layer.XYZ("clouds","http://${s}.tile.openweathermap.org/map/clouds/${z}/${x}/${y}.png",
+                    {
+                        isBaseLayer: false,
+                        opacity: 0.7,
+                        sphericalMercator: true
+                    }
+                );
+
+                // Create Precipitation Layer
+                var layer_precipitation = new OpenLayers.Layer.XYZ("precipitation","http://${s}.tile.openweathermap.org/map/precipitation/${z}/${x}/${y}.png",                    
+                    {
+                        isBaseLayer: false,
+                        opacity: 0.7,
+                        sphericalMercator: true
+                    }
+                );
+
+                map.addLayers([mapnik, layer_precipitation, layer_cloud]);
+                map.setCenter(lonlat, 9);
+            }
+            //OpenLayers MAP END
+            
+            
+            //FACEBOOK BEGIN
+            window.fbAsyncInit = function() {
+                FB.init({
+                appId      : '1500005533628076',
+                xfbml      : true,
+                version    : 'v2.5'
+            });
+
+            // ADD ADDITIONAL FACEBOOK CODE HERE
+            };
+
+            (function(d, s, id){
+                 var js, fjs = d.getElementsByTagName(s)[0];
+                 if (d.getElementById(id)) {return;}
+                 js = d.createElement(s); js.id = id;
+                 js.src = "//connect.facebook.net/en_US/sdk.js";
+                 fjs.parentNode.insertBefore(js, fjs);
+           }(document, 'script', 'facebook-jssdk'));
+
+                
+                function sharefb()
+                {
+                    FB.ui(
+                    {
+                        method: 'feed',
+                        link: 'http://forecast.io/',
+                        name: fbname,
+                        caption: fbcaption,
+                        description: fbdesc,
+                        picture: fbpic
+                    }, function(response){
+                                if(response != null && response['post_id'] != null)
+                                        alert('Posted Successfully');
+                                else
+                                        alert('Not Posted');
+                        });
+                }
+
+              
+            //FACEBOOK END
+            
+            $("document").ready(function() {
+				$(window).resize(function() {
+					if ($("#NextDaysTab").width() < 600) {
+						$("#days_color").css("background-color", "transparent");
+						$(".daily_table").css("-moz-border-radius", "50px");
+						$(".daily_table").css("-webkit-border-radius", "50px");
+						$(".daily_table").css("border-radius", "50px");
+					} else {
+						$("#days_color").css("background-color", "#000");
+						$(".daily_table").css("-moz-border-radius", "10px");
+						$(".daily_table").css("-webkit-border-radius", "10px");
+						$(".daily_table").css("border-radius", "10px");
+					}
+				});
+				$("#result").addClass("hidden");
+			});
+		</script>
+
+		<!-- Latest compiled and minified JavaScript -->
+		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+		<!-- Include all compiled plugins (below), or include individual files as needed -->
+		
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
+	</body>
+</Html>
